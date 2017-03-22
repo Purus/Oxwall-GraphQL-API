@@ -1,0 +1,8 @@
+{
+    "config": {
+        "vendor-dir": "classes"
+    },
+    "require": {
+        "webonyx/graphql-php": "^0.9"
+    }
+}

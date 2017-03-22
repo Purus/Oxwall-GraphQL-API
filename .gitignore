@@ -1,0 +1,6 @@
+.idea/
+composer.phar
+composer.lock
+/classes/webonyx/graphql-php/examples/
+/classes/webonyx/graphql-php/docs/
+/classes/webonyx/graphql-php/tests/
