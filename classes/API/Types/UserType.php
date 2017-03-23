@@ -14,7 +14,7 @@ class UserType extends ObjectType {
             'description' => 'Social network users',
             'fields' => function() {
                 return [
-                    'id' => Type::nonNull(Type::id()),
+                    'id' => Type::id(),
                     'email' => Type::string(),
                     'photo' => [
                         'type' => Type::string(),
@@ -27,12 +27,16 @@ class UserType extends ObjectType {
                     'joinIp' => Type::string(),
                 ];
             },
-            'resolveField' => function($value, $args, $context, ResolveInfo $info) {
-                if (method_exists($this, $info->fieldName)) {
-                    return $this->{$info->fieldName}($value, $args, $context, $info);
-                } else {
-                    return $value->{$info->fieldName};
+            'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                $users = $context->users->findList(0, 50);
+                $allUsers = array();
+                $i = 0;
+                foreach ($users as $user) {
+                    $allUsers[$i]['id'] = $user->id;
+                    $i++;
                 }
+
+                return $allUsers;
             }
         ];
         parent::__construct($config);

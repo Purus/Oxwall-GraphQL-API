@@ -43,9 +43,8 @@ class GRAPHQL_CTRL_Action extends OW_ActionController {
         $appContext->request = $_REQUEST;
         $appContext->config = OW::getConfig();
         $appContext->plugin = BOL_PluginService::getInstance();
-        
-        OW::getPluginManager()->readPluginsList();
-        
+        $appContext->users = BOL_PluginService::getInstance();
+
         // Parse incoming query and variables
         if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
             $raw = file_get_contents('php://input') ?: '';

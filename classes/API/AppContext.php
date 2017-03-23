@@ -31,4 +31,6 @@ class AppContext {
     public $config;
 
     public $plugin;
+    
+    public $users;
 }

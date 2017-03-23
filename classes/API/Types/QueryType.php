@@ -21,7 +21,7 @@ class QueryType extends ObjectType {
                     'description' => 'Returns all detail about the social network'
                 ],
                 'user' => [
-                    'type' => new UserType(),
+                    'type' => Type::listOf(new UserType()),
                     'description' => 'Returns all users or by id',
                 ],
                 'hello' => Type::string(),
