@@ -21,7 +21,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 use GraphQL\Oxwall\AppContext;
-use GraphQL\Oxwall\Types\QueryType;
+use GraphQL\Oxwall\Types;
 use \GraphQL\Schema;
 use \GraphQL\GraphQL;
 use \GraphQL\Error\FormattedError;
@@ -35,15 +35,15 @@ class GRAPHQL_CTRL_Action extends OW_ActionController {
     public function index() {
         OW::getResponse()->clearHeaders();
         OW::getResponse()->setHeader('Content-Type', 'application/json; charset=utf-8');
-
+    
         // Prepare context that will be available in all field resolvers (as 3rd argument):
         $appContext = new AppContext();
         $appContext->viewer = 1; // simulated "currently logged-in user"
-        $appContext->rootUrl = 'http://localhost/oxwall/';
+        $appContext->rootUrl = OW_URL_HOME;
         $appContext->request = $_REQUEST;
-        $appContext->config = OW::getConfig();
-        $appContext->plugin = BOL_PluginService::getInstance();
-        $appContext->users = BOL_PluginService::getInstance();
+                $appContext->service = GRAPHQL_BOL_GeneralService::getInstance();
+        $appContext->userService = GRAPHQL_BOL_UserService::getInstance();
+        $appContext->blogService = GRAPHQL_BOL_BlogService::getInstance();
 
         // Parse incoming query and variables
         if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
@@ -60,7 +60,7 @@ class GRAPHQL_CTRL_Action extends OW_ActionController {
         try {
             // GraphQL schema to be passed to query executor:
             $schema = new Schema([
-                'query' => new QueryType()
+                'query' => Types::query()
             ]);
             $result = GraphQL::execute(
                             $schema, $data['query'], null, $appContext, (array) $data['variables']

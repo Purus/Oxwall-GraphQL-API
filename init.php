@@ -24,10 +24,16 @@ OW::getRouter()->addRoute(new OW_Route('graphql', 'graphql', "GRAPHQL_CTRL_Actio
 
 $classDir = OW::getPluginManager()->getPlugin('graphql')->getClassesDir();
 
-require_once $classDir . "autoload.php";
+$classesDir = array(
+    $classDir,
+    $classDir . 'API' . DS,
+    $classDir . 'API' . DS . 'Types' . DS,
+    $classDir . 'API' . DS . 'Types' . DS . 'Scalar',
+    $classDir . 'API' . DS . 'Types' . DS . 'Enum'
+);
 
-require_once $classDir   . 'API' . DS. 'AppContext.php';
-require_once $classDir   . 'API' . DS. 'Types'. DS. 'QueryType.php';
-require_once $classDir   . 'API' . DS. 'Types'. DS. 'SiteInfoType.php';
-require_once $classDir   . 'API' . DS. 'Types'. DS. 'UserType.php';
-require_once $classDir   . 'API' . DS. 'Types'. DS. 'PluginType.php';
+foreach ($classesDir as $directory) {
+    foreach (glob("{$directory}/*.php") as $filename) {
+        require_once $filename;
+    }
+}

@@ -25,12 +25,18 @@ class AppContext {
      */
     public $request;
 
-    /**
-     * @var Oxwall Configuration object
+        /**
+     * @var Generic Service instance
      */
-    public $config;
-
-    public $plugin;
+    public $service;
     
-    public $users;
+    /**
+     * @var User Service instance
+     */
+    public $userService;
+    
+    /**
+     * @var Blog Service instance
+     */
+    public $blogService;    
 }

@@ -2,29 +2,53 @@
 
 namespace GraphQL\Oxwall\Types;
 
-use GraphQL\Type\Definition\Type;
+use GraphQL\Oxwall\Types;
 use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\ResolveInfo;
 
 class BlogType extends ObjectType {
+
     public function __construct() {
         $config = [
             'name' => 'Blog',
             'description' => 'Blog posts',
             'fields' => function() {
                 return [
-                    'id' => Type::id(),
-                    'user' => new UserType(),
-                    'title' => Type::string(),
-                    'post' => Type::string(),
-                    'timestamp' => Type::string(),
-                    'isDraft' => Type::boolean(),
-                    'privacy' => Type::string(),
+                    'id' => [
+                        'type' => Types::id(),
+                        'description' => 'Blog Id'
+                    ],
+                    'user' => [
+                        'type' => Types::user(),
+                        'description' => 'User who crated the blog post'
+                    ],
+                    'title' => [
+                        'type' => Types::string(),
+                        'description' => 'Title of the blog post'
+                    ],
+                    'post' => [
+                        'type' => Types::string(),
+                        'description' => 'Content of the blog post'
+                    ],
+                    'timestamp' => [
+                        'type' => Types::int(),
+                        'description' => 'Blog post creation timestamp'
+                    ],
+                    'isDraft' => [
+                        'type' => Types::boolean(),
+                        'description' => 'Is the blog post in draft status?'
+                    ],
+                    'privacy' => [
+                        'type' => Types::string(),
+                        'description' => 'Privacy of the blog post'
+                    ],
+                    'url' => [
+                        'type' => Types::url(),
+                        'description' => 'Web Url of the blog post'
+                    ]
                 ];
             },
-            'resolve' => function($value, $args, $context, ResolveInfo $info) {
-            }
         ];
         parent::__construct($config);
     }
+
 }

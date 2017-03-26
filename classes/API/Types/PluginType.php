@@ -2,9 +2,8 @@
 
 namespace GraphQL\Oxwall\Types;
 
-use GraphQL\Type\Definition\Type;
+use GraphQL\Oxwall\Types;
 use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\ResolveInfo;
 
 class PluginType extends ObjectType {
 
@@ -14,8 +13,8 @@ class PluginType extends ObjectType {
             'description' => 'Details about the social network',
             'fields' => function() {
                 return [
-                    'name' => Type::string(),
-                    'key' => Type::string()
+                    'name' => Types::string(),
+                    'key' => Types::string()
                 ];
             },
         ];

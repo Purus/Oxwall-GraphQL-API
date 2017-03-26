@@ -5,7 +5,7 @@
  * For more information see License.txt in the plugin folder.
 
  * ---
- * Copyright (c) 2017, Purusothaman Ramanujam
+ * Copyright (c) 2012, Purusothaman Ramanujam
  * All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without modification, are not permitted provided.
@@ -20,11 +20,7 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-class EMAILLOGS_BOL_LogDao extends OW_BaseDao {
-
-    protected function __construct() {
-        parent::__construct();
-    }
+class GRAPHQL_BOL_GeneralService {
 
     private static $classInstance;
 
@@ -36,34 +32,39 @@ class EMAILLOGS_BOL_LogDao extends OW_BaseDao {
         return self::$classInstance;
     }
 
-    public function getDtoClassName() {
-        return 'EMAILLOGS_BOL_Log';
+    private function __construct() {
+        
     }
 
-    public function getTableName() {
-        return OW_DB_PREFIX . 'mail_logs';
+    public function getSiteInfo() {
+        return [
+            'url' => OW_URL_HOME,
+            'name' => OW::getConfig()->getValue('base', 'site_name'),
+            'description' => OW::getConfig()->getValue('base', 'site_description'),
+            'tagline' => OW::getConfig()->getValue('base', 'site_tagline'),
+            'email' => OW::getConfig()->getValue('base', 'site_email'),
+            'maintenance' => (int) OW::getConfig()->getValue('base', 'maintenance') == 1,
+            'currency' => OW::getConfig()->getValue('base', 'billing_currency'),
+            'version' => OW::getConfig()->getValue('base', 'soft_version'),
+            'activePlugins' => $this->getActivePlugins()
+        ];
     }
 
-    public function getAllLogs($page, $limit) {
-        $first = ($page - 1 ) * $limit;
+    public function getActivePlugins() {
+        $plugins = BOL_PluginService::getInstance()->findActivePlugins();
 
-        $example = new OW_Example();
+        $activePlugins = array();
+        $i = 0;
 
-        $example->setOrder('sentTime DESC');
-        $example->setLimitClause($first, $limit);
+        foreach ($plugins as $plugin) {
+            if (!$plugin->isSystem()) {
+                $activePlugins[$i]['key'] = $plugin->getKey();
+                $activePlugins[$i]['name'] = $plugin->getTitle();
+                $i++;
+            }
+        }
 
-        return $this->findListByExample($example);
-    }
-
-    public function getLogsCount() {
-        return $this->countAll();
-    }
-
-    public function deleteAll() {
-
-        $example = new OW_Example();
-        $example->andFieldGreaterThan('id', 1);
-        return $this->deleteByExample($example);
+        return $activePlugins;
     }
 
 }

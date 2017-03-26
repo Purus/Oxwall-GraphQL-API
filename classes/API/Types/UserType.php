@@ -2,9 +2,8 @@
 
 namespace GraphQL\Oxwall\Types;
 
-use GraphQL\Type\Definition\Type;
+use GraphQL\Oxwall\Types;
 use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\ResolveInfo;
 
 class UserType extends ObjectType {
 
@@ -14,29 +13,21 @@ class UserType extends ObjectType {
             'description' => 'Social network users',
             'fields' => function() {
                 return [
-                    'id' => Type::id(),
-                    'email' => Type::string(),
-                    'photo' => [
-                        'type' => Type::string(),
-                        'description' => 'User profile photo URL'
+                    'id' => Types::id(),
+                    'email' => Types::string(),
+                    'avatar' => [
+                        'type' => Types::string(),
+                        'description' => 'User profile avatar image URL'
                     ],
-                    'userName' => Type::string(),
-                    'joinStamp' => Type::string(),
-                    'activityStamp' => Type::string(),
-                    'emailVerify' => Type::boolean(),
-                    'joinIp' => Type::string(),
+                    'userName' => Types::string(),
+                    'joinStamp' => Types::int(),
+                    'activityStamp' => Types::int(),
+                    'emailVerify' => Types::boolean(),
+                    'joinIp' => Types::string(),
+                    'url' => Types::string(),
+                    'title' => Types::string(),
+                     'online' => Types::boolean()
                 ];
-            },
-            'resolve' => function($value, $args, $context, ResolveInfo $info) {
-                $users = $context->users->findList(0, 50);
-                $allUsers = array();
-                $i = 0;
-                foreach ($users as $user) {
-                    $allUsers[$i]['id'] = $user->id;
-                    $i++;
-                }
-
-                return $allUsers;
             }
         ];
         parent::__construct($config);

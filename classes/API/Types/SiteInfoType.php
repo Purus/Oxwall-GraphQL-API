@@ -2,9 +2,8 @@
 
 namespace GraphQL\Oxwall\Types;
 
-use GraphQL\Type\Definition\Type;
+use GraphQL\Oxwall\Types;
 use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\ResolveInfo;
 
 class SiteInfoType extends ObjectType {
 
@@ -15,71 +14,40 @@ class SiteInfoType extends ObjectType {
             'fields' => function() {
                 return [
                     'url' => [
-                        'type' => Type::string(),
-                        'resolve' => function() {
-                            return OW_URL_HOME;
-                        }
+                        'type' => Types::string(),
+                        'description' => 'URL of the social network'
                     ],
                     'name' => [
-                        'type' => Type::string(),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            return $context->config->getValue('base', 'site_name');
-                        }
+                        'type' => Types::string(),
+                        'description' => 'Description of the social network'
                     ],
                     'description' => [
-                        'type' => Type::string(),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            return $context->config->getValue('base', 'site_description');
-                        }
+                        'type' => Types::string(),
+                        'description' => 'Tagline of the social network'
                     ],
                     'tagline' => [
-                        'type' => Type::string(),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            return $context->config->getValue('base', 'site_tagline');
-                        }
+                        'type' => Types::string(),
+                        'description' => 'Tagline of the social network'
                     ],
                     'email' => [
-                        'type' => Type::string(),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            return $context->config->getValue('base', 'site_email');
-                        }
+                        'type' => Types::string(),
+                        'description' => 'Email of the social network'
                     ],
                     'maintenance' => [
-                        'type' => Type::boolean(),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            return (int) $context->config->getValue('base', 'maintenance') == 1;
-                        }
+                        'type' => Types::boolean(),
+                        'description' => 'Is website in maintenance mode?'
                     ],
                     'currency' => [
-                        'type' => Type::string(),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            return $context->config->getValue('base', 'billing_currency');
-                        }
-                    ],                            
+                        'type' => Types::string(),
+                        'description' => 'Base billing currency of the social network'
+                    ],
                     'version' => [
-                        'type' => Type::string(),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            return $context->config->getValue('base', 'soft_version');
-                        }
+                        'type' => Types::string(),
+                        'description' => 'Oxwall version'
                     ],
                     'activePlugins' => [
-                        'type' => Type::listOf(new PluginType()),
-                        'resolve' => function($entity, $args, $context, ResolveInfo $info) {
-                            $plugins = $context->plugin->findActivePlugins();
-
-                            $activePlugins = array();
-                            $i = 0;
-
-                            foreach ($plugins as $plugin) {
-                                if (!$plugin->isSystem()) {
-                                    $activePlugins[$i]['key'] = $plugin->getKey();
-                                    $activePlugins[$i]['name'] = $plugin->getTitle();
-                                    $i++;
-                                }
-                            }
-
-                            return $activePlugins;
-                        }
+                        'type' => Types::listOf(Types::plugin()),
+                        'description' => 'List of all active plugins'
                     ]
                 ];
             }
