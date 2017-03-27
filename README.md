@@ -24,14 +24,17 @@ From the official page of [GraphQL](http://graphql.org/):
 
 This is like any other Oxwall plugin and you can upload to *ow_plugins* folder either via ftp or via Cpanel UI or Oxwall Admin page. Once installed you can access the GraphQL endpoint in http://your-site.com/graphql.
 
+## Roadmap
+
 Below is the list of action items. Initially read-only queries will be supported. Later support for mutations will be added.
 
 - [x] Site Metadata
-- [ ] Users List
-- [ ] User Profile
-- [ ] Blogs
-- [ ] Newsfeed
+- [x] Users List fetching
+- [x] Blog posts fetching
+- [ ] Solve [N+1 problem](https://secure.phabricator.com/book/phabcontrib/article/n_plus_one/)
 - [ ] Photos
+- [ ] User Profile
+- [ ] Newsfeed
 - [ ] Forum
 - [ ] Groups
 
