@@ -28,7 +28,11 @@ class PhotoAlbumType extends ObjectType {
                     'timestamp' => [
                         'type' => Types::int(),
                         'description' => 'Timestamp of photo upload'
-                    ]
+                    ],
+                    'photo' => [
+                        'type' => Types::listOf(Types::photoType()),
+                        'description' => 'Photos of the album'
+                    ]                    
                 ];
             },
         ];
