@@ -19,6 +19,41 @@ class QueryType extends ObjectType {
                         return $context->service->getSiteInfo();
                     }
                 ],
+                'photoAlbum' => [
+                    'type' => Types::listOf(Types::photoAlbum()),
+                    'description' => 'Returns all photo albums',
+                    'args' => [
+                        'id' => [
+                            'type' => Types::id(),
+                            'description' => 'Id for which the album details are requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'userId' => [
+                            'type' => Types::id(),
+                            'description' => 'User id for which the photo albums are requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],                        
+                        'offset' => [
+                            'type' => Types::int(),
+                            'description' => 'Offset to fetch data from',
+                            'defaultValue' => 1
+                        ],
+                        'limit' => [
+                            'type' => Types::int(),
+                            'description' => 'Data limit to fetch',
+                            'defaultValue' => 50
+                        ],
+                    ],
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                        if ($args['id'] > 0) {
+                            return [];
+                        } else if ($args['userId'] != '') {
+                            return [];
+                        } else {
+                            return [];
+                        }
+                    }
+                ],                            
                 'photo' => [
                     'type' => Types::listOf(Types::photo()),
                     'description' => 'Returns all blog posts',
