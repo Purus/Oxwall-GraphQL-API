@@ -45,13 +45,15 @@ class GRAPHQL_BOL_BlogService {
 
         $posts = array();
 
+        $user = GRAPHQL_BOL_UserService::getInstance()->getUserById($id);
+        
         $posts[$id]['id'] = $dto->getId();
         $posts[$id]['title'] = $dto->getTitle();
         $posts[$id]['post'] = $dto->getPost();
         $posts[$id]['privacy'] = $dto->getPrivacy();
         $posts[$id]['timestamp'] = $dto->getTimestamp();
         $posts[$id]['isDraft'] = $dto->isDraft();
-        $posts[$id]['user'] = GRAPHQL_BOL_UserService::getInstance()->getUserById($id);
+        $posts[$id]['user'] = $user[$id];
         $posts[$id]['url'] = OW::getRouter()->urlForRoute('user-post', array('id' => $id));
 
         return $posts;
@@ -59,11 +61,12 @@ class GRAPHQL_BOL_BlogService {
 
     public function getBlogPosts($case, $first, $count, $tag = '') {
         list($list, $itemsCount) = $this->getData($case, $first, $count, $tag);
-        $posts = array();
+        $posts = $idList = array();
 
         foreach ($list as $item) {
             $dto = $item['dto'];
             $id = $dto->getId();
+            $idList[] = $id;
 
             $posts[$id]['id'] = $dto->getId();
             $posts[$id]['title'] = $dto->getTitle();
@@ -71,8 +74,13 @@ class GRAPHQL_BOL_BlogService {
             $posts[$id]['privacy'] = $dto->getPrivacy();
             $posts[$id]['timestamp'] = $dto->getTimestamp();
             $posts[$id]['isDraft'] = $dto->isDraft();
-            $posts[$id]['user'] = '1';
             $posts[$id]['url'] = OW::getRouter()->urlForRoute('user-post', array('id' => $id));
+        }
+
+        $users = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($idList);
+
+        foreach ($users as $id => $user) {
+            $posts[$id]['user'] = $user;
         }
 
         return $posts;

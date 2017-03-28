@@ -2,6 +2,11 @@
 
 namespace GraphQL\Oxwall;
 
+use GraphQL\Oxwall\Types\Scalar\UrlType;
+use GraphQL\Oxwall\Types\Scalar\EmailType;
+use GraphQL\Oxwall\Types\Enum\UserListEnum;
+use GraphQL\Oxwall\Types\Enum\BlogListEnum;
+use GraphQL\Oxwall\Types\Enum\PhotoListEnum;
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\Type;
@@ -10,10 +15,8 @@ use GraphQL\Oxwall\Types\UserType;
 use GraphQL\Oxwall\Types\SiteInfoType;
 use GraphQL\Oxwall\Types\BlogType;
 use GraphQL\Oxwall\Types\PluginType;
-use GraphQL\Oxwall\Types\Scalar\UrlType;
-use GraphQL\Oxwall\Types\Scalar\EmailType;
-use GraphQL\Oxwall\Types\Enum\UserListEnum;
-use GraphQL\Oxwall\Types\Enum\BlogListEnum;
+use GraphQL\Oxwall\Types\PhotoType;
+use GraphQL\Oxwall\Types\PhotoAlbumType;
 
 /**
  * Class Types
@@ -30,7 +33,9 @@ class Types {
     private static $plugin;
     private static $blog;
     private static $query;
-    
+    private static $photo;
+    private static $photoalbum;
+
     /**
      * @return UserType
      */
@@ -60,6 +65,20 @@ class Types {
     }
 
     /**
+     * @return PhotoType
+     */
+    public static function photo() {
+        return self::$photo ?: (self::$photo = new PhotoType());
+    }
+
+    /**
+     * @return PhotoAlbumType
+     */
+    public static function photoAlbum() {
+        return self::$photoalbum ?: (self::$photoalbum = new PhotoAlbumType());
+    }
+
+    /**
      * @return QueryType
      */
     public static function query() {
@@ -81,21 +100,29 @@ class Types {
         return self::$urlType ?: (self::$urlType = new UrlType());
     }
 
-        private static $userListEnum;
-        private static $blogListEnum;
-        
-        /**
+    private static $userListEnum;
+    private static $blogListEnum;
+private static $photoListEnum;
+
+    /**
      * @return UserListEnum
      */
     public static function userListEnum() {
         return self::$userListEnum ?: (self::$userListEnum = new UserListEnum());
     }
-    
-            /**
+
+    /**
      * @return BlogListEnum
      */
     public static function blogListEnum() {
         return self::$blogListEnum ?: (self::$blogListEnum = new BlogListEnum());
+    }
+
+        /**
+     * @return PhotoListEnum
+     */
+    public static function photoListEnum() {
+        return self::$photoListEnum ?: (self::$photoListEnum = new PhotoListEnum());
     }
     
     /**
@@ -116,6 +143,7 @@ class Types {
      */
     public static function float(){
     return Type::float();
+
     }
 
 /**
@@ -130,6 +158,7 @@ public static function id() {
  */
 public static function int(){
 return Type::int();
+
     }
 
 /**
@@ -137,6 +166,7 @@ return Type::int();
  */
 public static function string(){
 return Type::string();
+
     }
 
 /**

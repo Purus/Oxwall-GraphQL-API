@@ -4,7 +4,6 @@ namespace GraphQL\Oxwall\Types;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\EnumType;
 use GraphQL\Oxwall\Types;
 
 class QueryType extends ObjectType {
@@ -20,6 +19,51 @@ class QueryType extends ObjectType {
                         return $context->service->getSiteInfo();
                     }
                 ],
+                'photo' => [
+                    'type' => Types::listOf(Types::photo()),
+                    'description' => 'Returns all blog posts',
+                    'args' => [
+                        'id' => [
+                            'type' => Types::id(),
+                            'description' => 'Id for which the photos are requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'userId' => [
+                            'type' => Types::id(),
+                            'description' => 'User id for which the photos are requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],                        
+                        'tag' => [
+                            'type' => Types::string(),
+                            'description' => 'Tag for which the photos are requested. Other arguments will be ignored',
+                            'defaultValue' => ''
+                        ],
+                        'key' => [
+                            'type' => Types::photoListEnum(),
+                            'description' => 'Type of photo list to get',
+                            'defaultValue' => 'latest'
+                        ],
+                        'offset' => [
+                            'type' => Types::int(),
+                            'description' => 'Offset to fetch data from',
+                            'defaultValue' => 1
+                        ],
+                        'limit' => [
+                            'type' => Types::int(),
+                            'description' => 'Data limit to fetch',
+                            'defaultValue' => 50
+                        ],
+                    ],
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                        if ($args['id'] > 0) {
+                            return [];
+                        } else if ($args['tag'] != '') {
+                            return [];
+                        } else {
+                            return $context->photoService->getPhotoList($args['key'], $args['offset'], $args['limit']);
+                        }
+                    }
+                ],                        
                 'blog' => [
                     'type' => Types::listOf(Types::blog()),
                     'description' => 'Returns all blog posts',

@@ -38,5 +38,10 @@ class AppContext {
     /**
      * @var Blog Service instance
      */
-    public $blogService;    
+    public $blogService;   
+    
+    /**
+     * @var Blog Service instance
+     */
+    public $photoService;     
 }

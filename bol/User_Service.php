@@ -104,4 +104,14 @@ class GRAPHQL_BOL_UserService {
         return $this->getUserDeatils($users);
     }
 
+    public function getUsersListByIdList($idList) {
+        $users = BOL_UserService::getInstance()->findUserListByIdList($idList);
+
+        if (!$users) {
+            return [];
+        }
+
+        return $this->getUserDeatils($users);
+    }
+
 }
