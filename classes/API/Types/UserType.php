@@ -13,7 +13,7 @@ class UserType extends ObjectType {
             'description' => 'Social network users',
             'fields' => function() {
                 return [
-                    'id' => Types::id(),
+                    'id' => Types::int(),
                     'email' => Types::string(),
                     'avatar' => [
                         'type' => Types::string(),
@@ -26,7 +26,8 @@ class UserType extends ObjectType {
                     'joinIp' => Types::string(),
                     'url' => Types::string(),
                     'title' => Types::string(),
-                     'online' => Types::boolean()
+                    'online' => Types::boolean(),
+                    'profile' => Types::listOf(Types::profile())
                 ];
             }
         ];

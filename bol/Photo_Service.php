@@ -23,6 +23,7 @@
 class GRAPHQL_BOL_PhotoService {
 
     private static $classInstance;
+    private $service;
 
     public static function getInstance() {
         if (self::$classInstance === null) {
@@ -33,17 +34,17 @@ class GRAPHQL_BOL_PhotoService {
     }
 
     private function __construct() {
-        
+        $this->service = PHOTO_BOL_PhotoService::getInstance();
     }
 
-    public function getPhotoList($listType, $page, $limit) {
-        $photos = PHOTO_BOL_PhotoService::getInstance()->findPhotoList($listType, $page, $limit);
-
-        if (!$photos) {
+    public function getPhotoByUserId($userId,$page, $limit) {
+         $photos = $this->service->findPhotoListByUserId($userId, $page, $limit);
+         
+    if (!$photos) {
             return [];
         }
 
-        $allPhotos = $userIdList = array();
+        $allPhotos = $userIdList = $albumIdList = array();
 
         foreach ($photos as $photo) {
             $id = $photo['id'];
@@ -58,16 +59,154 @@ class GRAPHQL_BOL_PhotoService {
             $allPhotos[$id]['hash'] = $photo['hash'];
             $allPhotos[$id]['uploadKey'] = $photo['uploadKey'];
             $allPhotos[$id]['dimension'] = $photo['dimension'];
-            $allPhotos[$id]['url'] = $photo['url'];
+            $allPhotos[$id]['previewPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'preview', $photo);
+            $allPhotos[$id]['originalPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'original', $photo);
+            $allPhotos[$id]['fullPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'fullscreen', $photo);
+            $allPhotos[$id]['mainPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'main', $photo);
+            $allPhotos[$id]['smallPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'small', $photo);
+            $allPhotos[$id]['userId'] = $photo['userId'];
+
+            $albums = $this->getAlbumInfoById($photo['albumId']);
+
+            $allPhotos[$id]['album'] = $albums[0];
         }
 
         $users = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($userIdList);
 
-        foreach ($users as $id => $user) {
-            $allPhotos[$id]['user'] = $user;
+        foreach ($allPhotos as $id => $photo) {
+            $allPhotos[$id]['user'] = $users[$photo['userId']];
         }
 
         return $allPhotos;
+    }
+    
+    public function getPhotoById($id) {
+        $photo = $this->service->findPhotoById($id);
+
+        if (!$photo) {
+            return [];
+        }
+
+        $allPhotos = $userIdList = $albumIdList = array();
+
+        $id = $photo->id;
+        $photoInfo = get_object_vars($photo);
+
+        $allPhotos[$id]['id'] = $id;
+        $allPhotos[$id]['description'] = $photo->description;
+        $allPhotos[$id]['timestamp'] = $photo->addDatetime;
+        $allPhotos[$id]['status'] = $photo->status;
+        $allPhotos[$id]['hasFullsize'] = $photo->hasFullsize;
+        $allPhotos[$id]['privacy'] = $photo->privacy;
+        $allPhotos[$id]['hash'] = $photo->hash;
+        $allPhotos[$id]['uploadKey'] = $photo->uploadKey;
+        $allPhotos[$id]['dimension'] = $photo->dimension;
+        $allPhotos[$id]['previewPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'preview', $photoInfo);
+        $allPhotos[$id]['originalPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'original', $photoInfo);
+        $allPhotos[$id]['fullPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'fullscreen', $photoInfo);
+        $allPhotos[$id]['mainPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'main', $photoInfo);
+        $allPhotos[$id]['smallPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'small', $photoInfo);
+        $allPhotos[$id]['userId'] = 0;
+
+        $albums = $this->getAlbumInfoById($photo->albumId);
+
+        $allPhotos[$id]['album'] = $albums[0];
+
+        return $allPhotos;
+    }
+
+    public function getPhotoList($listType, $page, $limit) {
+        $photos = $this->service->findPhotoList($listType, $page, $limit);
+
+        if (!$photos) {
+            return [];
+        }
+
+        $allPhotos = $userIdList = $albumIdList = array();
+
+        foreach ($photos as $photo) {
+            $id = $photo['id'];
+            $userIdList[] = $photo['userId'];
+
+            $allPhotos[$id]['id'] = $id;
+            $allPhotos[$id]['description'] = $photo['description'];
+            $allPhotos[$id]['timestamp'] = $photo['addDatetime'];
+            $allPhotos[$id]['status'] = $photo['status'];
+            $allPhotos[$id]['hasFullsize'] = $photo['hasFullsize'];
+            $allPhotos[$id]['privacy'] = $photo['privacy'];
+            $allPhotos[$id]['hash'] = $photo['hash'];
+            $allPhotos[$id]['uploadKey'] = $photo['uploadKey'];
+            $allPhotos[$id]['dimension'] = $photo['dimension'];
+            $allPhotos[$id]['previewPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'preview', $photo);
+            $allPhotos[$id]['originalPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'original', $photo);
+            $allPhotos[$id]['fullPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'fullscreen', $photo);
+            $allPhotos[$id]['mainPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'main', $photo);
+            $allPhotos[$id]['smallPhoto'] = $this->service->getPhotoUrlByPhotoInfo($id, 'small', $photo);
+            $allPhotos[$id]['userId'] = $photo['userId'];
+
+            $albums = $this->getAlbumInfoById($photo['albumId']);
+
+            $allPhotos[$id]['album'] = $albums[0];
+        }
+
+        $users = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($userIdList);
+
+        foreach ($allPhotos as $id => $photo) {
+            $allPhotos[$id]['user'] = $users[$photo['userId']];
+        }
+
+        return $allPhotos;
+    }
+
+    public function getAlbums($userId, $page, $limit) {
+        $first = ( $page - 1 ) * $limit;
+
+        $example = new OW_Example();
+
+        if ($userId > 0) {
+            $example->andFieldEqual('userId', $userId);
+        }
+
+        $example->setLimitClause($first, $limit);
+
+        $albums = PHOTO_BOL_PhotoAlbumDao::getInstance()->findListByExample($example);
+
+        $allAlbums = array();
+
+        if (!$albums) {
+            return [];
+        }
+
+        foreach ($albums as $album) {
+            $allAlbums = $this->getAlbumInfoById($album->id);
+        }
+
+        return $allAlbums;
+    }
+
+    public function getAlbumInfoById($albumId) {
+        $albumInfo = array();
+
+        $albums = PHOTO_BOL_PhotoAlbumService::getInstance()->findEntityAlbumList($albumId, "user", 1, 50);
+
+        if (!$albums) {
+            return [];
+        }
+
+        foreach ($albums as $album) {
+            $dto = $album['dto'];
+            $user = GRAPHQL_BOL_UserService::getInstance()->getUserById($dto->userId);
+            
+            $albumInfo['name'] = $dto->name;
+            $albumInfo['description'] = $dto->description;
+            $albumInfo['timestamp'] = $dto->createDatetime;
+            $albumInfo['id'] = $dto->id;
+            $albumInfo['cover'] = $album['cover'];
+            $albumInfo['photosCount'] = $album['photo_count'];
+            $albumInfo['user'] = $user[$dto->userId];
+        }
+
+        return array($albumInfo);
     }
 
 }

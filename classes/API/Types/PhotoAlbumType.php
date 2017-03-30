@@ -14,7 +14,7 @@ class PhotoAlbumType extends ObjectType {
             'fields' => function() {
                 return [
                     'id' => [
-                        'type' => Types::id(),
+                        'type' => Types::int(),
                         'description' => 'Photo Id'
                     ],
                     'name' => [
@@ -29,10 +29,22 @@ class PhotoAlbumType extends ObjectType {
                         'type' => Types::int(),
                         'description' => 'Timestamp of photo upload'
                     ],
+                    'cover' => [
+                        'type' => Types::string(),
+                        'description' => 'Cover image of the album'
+                    ],
+                    'user' => [
+                        'type' => Types::user(),
+                        'description' => 'Owner of the album'
+                    ],
+                    'photosCount' => [
+                        'type' => Types::int(),
+                        'description' => 'Total images in the album'
+                    ],
                     'photo' => [
-                        'type' => Types::listOf(Types::photoType()),
+                        'type' => Types::listOf(Types::photo()),
                         'description' => 'Photos of the album'
-                    ]                    
+                    ]
                 ];
             },
         ];

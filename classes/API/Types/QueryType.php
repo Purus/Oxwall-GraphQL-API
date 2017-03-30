@@ -24,15 +24,15 @@ class QueryType extends ObjectType {
                     'description' => 'Returns all photo albums',
                     'args' => [
                         'id' => [
-                            'type' => Types::id(),
+                            'type' => Types::int(),
                             'description' => 'Id for which the album details are requested. Other arguments will be ignored',
                             'defaultValue' => 0
                         ],
                         'userId' => [
-                            'type' => Types::id(),
+                            'type' => Types::int(),
                             'description' => 'User id for which the photo albums are requested. Other arguments will be ignored',
                             'defaultValue' => 0
-                        ],                        
+                        ],
                         'offset' => [
                             'type' => Types::int(),
                             'description' => 'Offset to fetch data from',
@@ -46,14 +46,14 @@ class QueryType extends ObjectType {
                     ],
                     'resolve' => function($value, $args, $context, ResolveInfo $info) {
                         if ($args['id'] > 0) {
-                            return [];
-                        } else if ($args['userId'] != '') {
-                            return [];
+                            return $context->photoService->getAlbumInfoById($args['id']);
+                        } else if ($args['userId'] > 0) {
+                            return $context->photoService->getAlbums($args['userId'], $args['offset'], $args['limit']);
                         } else {
-                            return [];
+                            return $context->photoService->getAlbums(0, $args['offset'], $args['limit']);
                         }
                     }
-                ],                            
+                ],
                 'photo' => [
                     'type' => Types::listOf(Types::photo()),
                     'description' => 'Returns all blog posts',
@@ -67,11 +67,6 @@ class QueryType extends ObjectType {
                             'type' => Types::id(),
                             'description' => 'User id for which the photos are requested. Other arguments will be ignored',
                             'defaultValue' => 0
-                        ],                        
-                        'tag' => [
-                            'type' => Types::string(),
-                            'description' => 'Tag for which the photos are requested. Other arguments will be ignored',
-                            'defaultValue' => ''
                         ],
                         'key' => [
                             'type' => Types::photoListEnum(),
@@ -90,15 +85,16 @@ class QueryType extends ObjectType {
                         ],
                     ],
                     'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                        $context->profileService->getProfileById(1);
                         if ($args['id'] > 0) {
-                            return [];
-                        } else if ($args['tag'] != '') {
-                            return [];
+                            return $context->photoService->getPhotoById($args['id']);
+                        } else if ($args['userId'] > 0) {
+                            return $context->photoService->getPhotoByUserId($args['userId'], $args['offset'], $args['limit']);
                         } else {
                             return $context->photoService->getPhotoList($args['key'], $args['offset'], $args['limit']);
                         }
                     }
-                ],                        
+                ],
                 'blog' => [
                     'type' => Types::listOf(Types::blog()),
                     'description' => 'Returns all blog posts',

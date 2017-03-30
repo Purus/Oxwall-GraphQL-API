@@ -50,6 +50,7 @@ class GRAPHQL_BOL_UserService {
             $allUsers[$id]['joinIp'] = long2ip($user->joinIp);
             $allUsers[$id]['activityStamp'] = $user->activityStamp;
             $allUsers[$id]['emailVerify'] = (int) $user->emailVerify == 1;
+            $allUsers[$id]['profile'] = GRAPHQL_BOL_ProfileService::getInstance()->getProfileById($id);
         }
 
         $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars($idList);

@@ -25,23 +25,29 @@ class AppContext {
      */
     public $request;
 
-        /**
+    /**
      * @var Generic Service instance
      */
     public $service;
-    
+
     /**
      * @var User Service instance
      */
     public $userService;
-    
+
     /**
      * @var Blog Service instance
      */
-    public $blogService;   
-    
+    public $blogService;
+
     /**
      * @var Blog Service instance
      */
-    public $photoService;     
+    public $photoService;
+
+    /**
+     * @var User Profile Service instance
+     */
+    public $profileService;
+
 }

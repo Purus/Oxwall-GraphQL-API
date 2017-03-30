@@ -45,6 +45,7 @@ class GRAPHQL_CTRL_Action extends OW_ActionController {
         $appContext->userService = GRAPHQL_BOL_UserService::getInstance();
         $appContext->blogService = GRAPHQL_BOL_BlogService::getInstance();
         $appContext->photoService = GRAPHQL_BOL_PhotoService::getInstance();
+        $appContext->profileService = GRAPHQL_BOL_ProfileService::getInstance();
         
         // Parse incoming query and variables
         if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {

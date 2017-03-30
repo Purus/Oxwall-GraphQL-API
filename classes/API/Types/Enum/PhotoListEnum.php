@@ -17,7 +17,7 @@ class PhotoListEnum extends EnumType {
                 'FEATURED' => [
                     'value' => 'featured',
                     'description' => 'Featured photos'
-                ],                
+                ],
                 'MOST_DISCUSSED' => [
                     'value' => 'most_discussed',
                     'description' => 'Most discussed photos'

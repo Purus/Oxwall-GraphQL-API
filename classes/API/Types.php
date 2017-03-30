@@ -17,6 +17,7 @@ use GraphQL\Oxwall\Types\BlogType;
 use GraphQL\Oxwall\Types\PluginType;
 use GraphQL\Oxwall\Types\PhotoType;
 use GraphQL\Oxwall\Types\PhotoAlbumType;
+use GraphQL\Oxwall\Types\UserProfileType;
 
 /**
  * Class Types
@@ -35,6 +36,7 @@ class Types {
     private static $query;
     private static $photo;
     private static $photoalbum;
+    private static $profile;
 
     /**
      * @return UserType
@@ -79,6 +81,13 @@ class Types {
     }
 
     /**
+     * @return UserProfileType
+     */
+    public static function profile() {
+        return self::$profile ?: (self::$profile = new UserProfileType());
+    }
+
+    /**
      * @return QueryType
      */
     public static function query() {
@@ -102,7 +111,7 @@ class Types {
 
     private static $userListEnum;
     private static $blogListEnum;
-private static $photoListEnum;
+    private static $photoListEnum;
 
     /**
      * @return UserListEnum
@@ -118,13 +127,13 @@ private static $photoListEnum;
         return self::$blogListEnum ?: (self::$blogListEnum = new BlogListEnum());
     }
 
-        /**
+    /**
      * @return PhotoListEnum
      */
     public static function photoListEnum() {
         return self::$photoListEnum ?: (self::$photoListEnum = new PhotoListEnum());
     }
-    
+
     /**
      * @param $name
      * @param null $objectKey
@@ -144,6 +153,8 @@ private static $photoListEnum;
     public static function float(){
     return Type::float();
 
+
+
     }
 
 /**
@@ -159,6 +170,8 @@ public static function id() {
 public static function int(){
 return Type::int();
 
+
+
     }
 
 /**
@@ -166,6 +179,8 @@ return Type::int();
  */
 public static function string(){
 return Type::string();
+
+
 
     }
 
