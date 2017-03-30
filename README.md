@@ -20,6 +20,14 @@ From the official page of [GraphQL](http://graphql.org/):
 
 - Addition of new fields and business logic will be cumbersome in REST services. You need to maintain multiple versions of API. In GraphQL you can add new fields and logics without impacting existing logic.
 
+Other significant features are:
+
+- Single Client endpoint.
+
+- Simple and composable API: GraphQL Query Language avoids REST endpoints explosion.
+
+- Self-documented: via in-browser IDE GraphiQL.
+
 ## Installing Plugin
 
 This is like any other Oxwall plugin and you can upload to *ow_plugins* folder either via ftp or via Cpanel UI or Oxwall Admin page. Once installed you can access the GraphQL endpoint in http://your-site.com/graphql.
