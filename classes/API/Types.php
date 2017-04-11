@@ -18,6 +18,7 @@ use GraphQL\Oxwall\Types\PluginType;
 use GraphQL\Oxwall\Types\PhotoType;
 use GraphQL\Oxwall\Types\PhotoAlbumType;
 use GraphQL\Oxwall\Types\UserProfileType;
+use GraphQL\Oxwall\Types\NewsfeedType;
 
 /**
  * Class Types
@@ -37,7 +38,7 @@ class Types {
     private static $photo;
     private static $photoalbum;
     private static $profile;
-
+    private static $newsfeed;
     /**
      * @return UserType
      */
@@ -87,6 +88,12 @@ class Types {
         return self::$profile ?: (self::$profile = new UserProfileType());
     }
 
+    /**
+     * @return NewsfeedType
+     */
+    public static function newsfeed() {
+        return self::$newsfeed ?: (self::$newsfeed = new NeewsfeedType());
+    }
     /**
      * @return QueryType
      */
