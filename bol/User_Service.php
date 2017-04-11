@@ -39,6 +39,9 @@ class GRAPHQL_BOL_UserService {
     private function getUserDeatils($users) {
         $allUsers = $avatarsList = $idList = array();
 
+if(!$users){
+    return $allUsers;
+}
         foreach ($users as $user) {
             $id = $user->id;
             $idList[] = $id;
@@ -56,15 +59,19 @@ class GRAPHQL_BOL_UserService {
         $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars($idList);
         $onlineInfo = BOL_UserService::getInstance()->findOnlineStatusForUserList($idList);
 
+if($avatars){ 
         foreach ($avatars as $userId => $avatarData) {
             $allUsers[$userId]['avatar'] = isset($avatarData['src']) ? $avatarData['src'] : '';
             $allUsers[$userId]['url'] = isset($avatarData['url']) ? $avatarData['url'] : '';
             $allUsers[$userId]['title'] = isset($avatarData['title']) ? $avatarData['title'] : '';
         }
+}
 
+if($onlineInfo){ 
         foreach ($onlineInfo as $userId => $isOnline) {
             $allUsers[$userId]['online'] = $isOnline;
         }
+}
 
         return $allUsers;
     }

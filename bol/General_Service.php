@@ -46,7 +46,9 @@ class GRAPHQL_BOL_GeneralService {
             'maintenance' => (int) OW::getConfig()->getValue('base', 'maintenance') == 1,
             'currency' => OW::getConfig()->getValue('base', 'billing_currency'),
             'version' => OW::getConfig()->getValue('base', 'soft_version'),
-            'activePlugins' => $this->getActivePlugins()
+            'activePlugins' => $this->getActivePlugins(),
+            'primaryMenu' => $this->getPrimayMenu(),
+            'secondaryMenu' => $this->getSecondrayMenu()
         ];
     }
 
@@ -65,6 +67,36 @@ class GRAPHQL_BOL_GeneralService {
         }
 
         return $activePlugins;
+    }
+
+    public function getPrimayMenu() {
+        $menuItems = OW::getDocument()->getMasterPage()->getMenu(BOL_NavigationService::MENU_TYPE_MAIN)->getMenuItems();
+
+        $allMenus = array();
+        $i = 0;
+
+        foreach ($menuItems as $menu) {
+            $allMenus[$i]['key'] = $menu->getKey();
+            $allMenus[$i]['prefix'] = $menu->getPrefix();
+            $i++;
+        }
+
+        return $allMenus;
+    }
+
+    public function getSecondrayMenu() {
+        $menuItems = BOL_NavigationService::getInstance()->findMenuItems(BOL_NavigationService::MENU_TYPE_BOTTOM);
+
+        $allMenus = array();
+        $i = 0;
+
+        foreach ($menuItems as $menu) {
+            $allMenus[$i]['key'] = $menu['key'];
+            $allMenus[$i]['prefix'] = $menu['prefix'];
+            $i++;
+        }
+
+        return $allMenus;
     }
 
 }

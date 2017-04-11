@@ -48,7 +48,15 @@ class SiteInfoType extends ObjectType {
                     'activePlugins' => [
                         'type' => Types::listOf(Types::plugin()),
                         'description' => 'List of all active plugins'
-                    ]
+                    ],
+                    'primaryMenu' => [
+                        'type' => Types::listOf(Types::menu()),
+                        'description' => 'List of all primay menu items'
+                    ],
+                    'secondaryMenu' => [
+                        'type' => Types::listOf(Types::menu()),
+                        'description' => 'List of all secondary menu items'
+                    ]                       
                 ];
             }
         ];
