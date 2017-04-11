@@ -19,6 +19,8 @@ use GraphQL\Oxwall\Types\PhotoType;
 use GraphQL\Oxwall\Types\PhotoAlbumType;
 use GraphQL\Oxwall\Types\UserProfileType;
 use GraphQL\Oxwall\Types\MenuType;
+use GraphQL\Oxwall\Types\NewsfeedType;
+
 /**
  * Class Types
  *
@@ -38,6 +40,8 @@ class Types {
     private static $photoalbum;
     private static $profile;
     private static $menu;
+    private static $newsfeed;
+	
     /**
      * @return UserType
      */
@@ -94,6 +98,12 @@ class Types {
         return self::$menu ?: (self::$menu = new MenuType());
     }
     
+    /**
+     * @return NewsfeedType
+     */
+    public static function newsfeed() {
+        return self::$newsfeed ?: (self::$newsfeed = new NeewsfeedType());
+    }
     /**
      * @return QueryType
      */

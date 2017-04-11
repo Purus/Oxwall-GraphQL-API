@@ -54,6 +54,25 @@ class QueryType extends ObjectType {
                         }
                     }
                 ],
+                'newsfeed' => [
+                    'type' => Types::listOf(Types::newsfeed()),
+                    'description' => 'Returns all newsfeed items',
+                    'args' => [
+                        'offset' => [
+                            'type' => Types::int(),
+                            'description' => 'Offset to fetch data from',
+                            'defaultValue' => 1
+                        ],
+                        'limit' => [
+                            'type' => Types::int(),
+                            'description' => 'Data limit to fetch',
+                            'defaultValue' => 50
+                        ],
+                    ],
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                            return $context->newsfeedService->getSiteFeeds($args['offset'], $args['limit']);
+                    }
+                ],                
                 'photo' => [
                     'type' => Types::listOf(Types::photo()),
                     'description' => 'Returns all blog posts',

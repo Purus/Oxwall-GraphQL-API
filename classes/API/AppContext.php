@@ -50,4 +50,9 @@ class AppContext {
      */
     public $profileService;
 
+    /**
+     * @var Newsfeed Service instance
+     */
+    public $newsfeedService;
+
 }
