@@ -24,7 +24,7 @@ class UserProfileType extends ObjectType {
                     'value' => [
                         'type' => Types::string(),
                         'description' => 'Profile Question Value'
-                    ]                      
+                    ]
                 ];
             },
         ];

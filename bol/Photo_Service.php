@@ -37,10 +37,10 @@ class GRAPHQL_BOL_PhotoService {
         $this->service = PHOTO_BOL_PhotoService::getInstance();
     }
 
-    public function getPhotoByUserId($userId,$page, $limit) {
-         $photos = $this->service->findPhotoListByUserId($userId, $page, $limit);
-         
-    if (!$photos) {
+    public function getPhotoByUserId($userId, $page, $limit) {
+        $photos = $this->service->findPhotoListByUserId($userId, $page, $limit);
+
+        if (!$photos) {
             return [];
         }
 
@@ -79,7 +79,7 @@ class GRAPHQL_BOL_PhotoService {
 
         return $allPhotos;
     }
-    
+
     public function getPhotoById($id) {
         $photo = $this->service->findPhotoById($id);
 
@@ -125,6 +125,7 @@ class GRAPHQL_BOL_PhotoService {
         $allPhotos = $userIdList = $albumIdList = array();
 
         foreach ($photos as $photo) {
+//            printVar($photo);
             $id = $photo['id'];
             $userIdList[] = $photo['userId'];
 
@@ -145,7 +146,6 @@ class GRAPHQL_BOL_PhotoService {
             $allPhotos[$id]['userId'] = $photo['userId'];
 
             $albums = $this->getAlbumInfoById($photo['albumId']);
-
             $allPhotos[$id]['album'] = $albums[0];
         }
 
@@ -186,27 +186,26 @@ class GRAPHQL_BOL_PhotoService {
 
     public function getAlbumInfoById($albumId) {
         $albumInfo = array();
+        $dto = PHOTO_BOL_PhotoAlbumService::getInstance()->findAlbumById($albumId);
 
-        $albums = PHOTO_BOL_PhotoAlbumService::getInstance()->findEntityAlbumList($albumId, "user", 1, 50);
-
-        if (!$albums) {
+        if (!$dto) {
             return [];
         }
 
-        foreach ($albums as $album) {
-            $dto = $album['dto'];
-            $user = GRAPHQL_BOL_UserService::getInstance()->getUserById($dto->userId);
-            
-            $albumInfo['name'] = $dto->name;
-            $albumInfo['description'] = $dto->description;
-            $albumInfo['timestamp'] = $dto->createDatetime;
-            $albumInfo['id'] = $dto->id;
-            $albumInfo['cover'] = $album['cover'];
-            $albumInfo['photosCount'] = $album['photo_count'];
-            $albumInfo['user'] = $user[$dto->userId];
-        }
+        $covers = PHOTO_BOL_PhotoAlbumCoverDao::getInstance()->getAlbumCoverUrlListForAlbumIdList(array($albumId));
+        $counters = PHOTO_BOL_PhotoAlbumService::getInstance()->countAlbumPhotosForList(array($albumId));
 
-        return array($albumInfo);
+        $user = GRAPHQL_BOL_UserService::getInstance()->getUserById($dto->userId);
+
+        $albumInfo['name'] = $dto->name;
+        $albumInfo['description'] = $dto->description;
+        $albumInfo['timestamp'] = $dto->createDatetime;
+        $albumInfo['id'] = $dto->id;
+        $albumInfo['cover'] = $covers[$albumId];
+        $albumInfo['photosCount'] = $counters[$albumId];
+        $albumInfo['user'] = $user[$dto->userId];
+
+        return [$albumInfo];
     }
 
 }

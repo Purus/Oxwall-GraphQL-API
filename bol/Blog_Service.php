@@ -46,7 +46,7 @@ class GRAPHQL_BOL_BlogService {
         $posts = array();
 
         $user = GRAPHQL_BOL_UserService::getInstance()->getUserById($id);
-        
+
         $posts[$id]['id'] = $dto->getId();
         $posts[$id]['title'] = $dto->getTitle();
         $posts[$id]['post'] = $dto->getPost();

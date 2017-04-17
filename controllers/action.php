@@ -35,7 +35,6 @@ class GRAPHQL_CTRL_Action extends OW_ActionController {
     public function index() {
 //        OW::getResponse()->clearHeaders();
 //        OW::getResponse()->setHeader('Content-Type', 'application/json; charset=utf-8');
-
         // Prepare context that will be available in all field resolvers (as 3rd argument):
         $appContext = new AppContext();
         $appContext->viewer = 1; // simulated "currently logged-in user"
@@ -47,7 +46,9 @@ class GRAPHQL_CTRL_Action extends OW_ActionController {
         $appContext->photoService = GRAPHQL_BOL_PhotoService::getInstance();
         $appContext->profileService = GRAPHQL_BOL_ProfileService::getInstance();
         $appContext->newsfeedService = GRAPHQL_BOL_NewsfeedService::getInstance();
-        
+        $appContext->groupService = GRAPHQL_BOL_GroupService::getInstance();
+        $appContext->videoService = GRAPHQL_BOL_VideoService::getInstance();
+
         // Parse incoming query and variables
         if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
             $raw = file_get_contents('php://input') ?: '';

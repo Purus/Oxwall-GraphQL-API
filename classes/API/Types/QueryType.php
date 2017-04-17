@@ -70,9 +70,9 @@ class QueryType extends ObjectType {
                         ],
                     ],
                     'resolve' => function($value, $args, $context, ResolveInfo $info) {
-                            return $context->newsfeedService->getSiteFeeds($args['offset'], $args['limit']);
+                        return $context->newsfeedService->getSiteNewsfeed();
                     }
-                ],                
+                ],
                 'photo' => [
                     'type' => Types::listOf(Types::photo()),
                     'description' => 'Returns all blog posts',
@@ -111,6 +111,47 @@ class QueryType extends ObjectType {
                             return $context->photoService->getPhotoByUserId($args['userId'], $args['offset'], $args['limit']);
                         } else {
                             return $context->photoService->getPhotoList($args['key'], $args['offset'], $args['limit']);
+                        }
+                    }
+                ],
+                'group' => [
+                    'type' => Types::listOf(Types::group()),
+                    'description' => 'Returns all groups',
+                    'args' => [
+                        'id' => [
+                            'type' => Types::id(),
+                            'description' => 'Id for which the group is requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'userId' => [
+                            'type' => Types::id(),
+                            'description' => 'User id for which the groups are requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'key' => [
+                            'type' => Types::groupListEnum(),
+                            'description' => 'Type of group list to get',
+                            'defaultValue' => 'latest'
+                        ],
+                        'offset' => [
+                            'type' => Types::int(),
+                            'description' => 'Offset to fetch data from',
+                            'defaultValue' => 1
+                        ],
+                        'limit' => [
+                            'type' => Types::int(),
+                            'description' => 'Data limit to fetch',
+                            'defaultValue' => 50
+                        ],
+                    ],
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                        $context->groupService->getProfileById(1);
+                        if ($args['id'] > 0) {
+                            return $context->groupService->getPhotoById($args['id']);
+                        } else if ($args['userId'] > 0) {
+                            return $context->groupService->getPhotoByUserId($args['userId'], $args['offset'], $args['limit']);
+                        } else {
+                            return $context->groupService->getPhotoList($args['key'], $args['offset'], $args['limit']);
                         }
                     }
                 ],

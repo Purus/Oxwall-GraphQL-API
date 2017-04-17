@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This software is intended for use with Oxwall Free Community Software http://www.oxwall.org/ and is a proprietary licensed product. 
  * For more information see License.txt in the plugin folder.
@@ -16,76 +17,77 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 class GRAPHQL_BOL_GroupsService {
+
     private static $classInstance;
-    
+
     public static function getInstance() {
         if (self::$classInstance === null) {
             self::$classInstance = new self();
         }
         return self::$classInstance;
     }
-    
+
     private function __construct() {
         
     }
-    
-    public function getGroupById($id,$hasMembers = false) {
-    
+
+    public function getGroupById($id, $hasMembers = false) {
+
         $group = GROUPS_BOL_Service::getInstance()->findGroupById($id);
-        
+
         if (!$dto) {
             return [];
         }
-        
-        $group = array();
-        
-        $group[$id]['id'] = $id;
-        $group[$id]['title'] = strip_tags($group->title);
-        $group[$id]['description'] = strip_tags($group->description);
-        $group[$id]['timestamp'] = $group->timestamp;
-        $group[$id]['imageSmall'] => GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group,0);
-        $group[$id]['imageBig'] => GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group,1);           
-        $group[$id]['url'] = OW::getRouter()->urlForRoute('groups-view', array('groupId' => $group->id));
-        $group[$id]['user'] = GRAPHQL_BOL_UserService::getInstance()->getUserById($group->userId);
-        $group[$id]['userCount'] = GROUPS_BOL_Service::getInstance()->findUserListCount($id);
-        
-        if($hasMembers){
-          $groupUsersList = GROUPS_BOL_Service::getInstance()->findGroupUserIdList($id);
 
-          $gUsers = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($groupUsersList);
-          $group[$id]['members'] = $gUsers;           
-        }  
-              
-        return $group;
+        $groupInfo = array();
+
+        $groupInfo[$id]['id'] = $id;
+        $groupInfo[$id]['title'] = strip_tags($group->title);
+        $groupInfo[$id]['description'] = strip_tags($group->description);
+        $groupInfo[$id]['timestamp'] = $group->timestamp;
+        $groupInfo[$id]['imageSmall'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 0);
+        $groupInfo[$id]['imageBig'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 1);
+        $groupInfo[$id]['url'] = OW::getRouter()->urlForRoute('groups-view', array('groupId' => $group->id));
+        $groupInfo[$id]['user'] = GRAPHQL_BOL_UserService::getInstance()->getUserById($group->userId);
+        $groupInfo[$id]['userCount'] = GROUPS_BOL_Service::getInstance()->findUserListCount($id);
+
+        if ($hasMembers) {
+            $groupUsersList = GROUPS_BOL_Service::getInstance()->findGroupUserIdList($id);
+
+            $gUsers = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($groupUsersList);
+            $groupInfo[$id]['members'] = $gUsers;
+        }
+
+        return $groupInfo;
     }
-    
+
     public function getGroups($case, $hasMembers, $first, $count) {
         $groups = GROUPS_BOL_Service::getInstance()->findGroupList($case, $first, $count);
-        
+
         $allGroups = $idList = array();
-        
+
         foreach ($groups as $group) {
             $id = $group->id;
-            
+
             $idList[] = $id;
-            $userList[] = $group->userId;  
-            
+            $userList[] = $group->userId;
+
             $allGroups[$id]['id'] = $id;
             $allGroups[$id]['title'] = strip_tags($group->title);
-            $allGroups[$id]['description'] = strip_tags($group->description),
+            $allGroups[$id]['description'] = strip_tags($group->description);
             $allGroups[$id]['timestamp'] = $group->timestamp;
-            $allGroups[$id]['imageSmall'] => GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group,0),
-            $allGroups[$id]['imageBig'] => GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group,1),            
-            $allGroups[$id]['url'] = OW::getRouter()->urlForRoute('groups-view', array('groupId' => $group->id))
-            
-            if($hasMembers){
-              $groupUsersList = GROUPS_BOL_Service::getInstance()->findGroupUserIdList($id);
-              
-              $gUsers = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($groupUsersList);
-              $allGroups[$id]['members'] = $gUsers;           
+            $allGroups[$id]['imageSmall'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 0);
+            $allGroups[$id]['imageBig'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 1);
+            $allGroups[$id]['url'] = OW::getRouter()->urlForRoute('groups-view', array('groupId' => $group->id));
+
+            if ($hasMembers) {
+                $groupUsersList = GROUPS_BOL_Service::getInstance()->findGroupUserIdList($id);
+
+                $gUsers = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($groupUsersList);
+                $allGroups[$id]['members'] = $gUsers;
             }
         }
-        
+
         $usersCount = GROUPS_BOL_Service::getInstance()->findUserCountForList($idList);
         foreach ($usersCount as $id => $count) {
             $allGroups[$id]['userCount'] = $count;
@@ -95,7 +97,8 @@ class GRAPHQL_BOL_GroupsService {
         foreach ($users as $id => $user) {
             $allGroups[$id]['user'] = $user;
         }
-       
+
         return $allGroups;
     }
+
 }

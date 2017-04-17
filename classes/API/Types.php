@@ -7,6 +7,8 @@ use GraphQL\Oxwall\Types\Scalar\EmailType;
 use GraphQL\Oxwall\Types\Enum\UserListEnum;
 use GraphQL\Oxwall\Types\Enum\BlogListEnum;
 use GraphQL\Oxwall\Types\Enum\PhotoListEnum;
+use GraphQL\Oxwall\Types\Enum\GroupListEnum;
+use GraphQL\Oxwall\Types\Enum\VideoListEnum;
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\Type;
@@ -20,6 +22,8 @@ use GraphQL\Oxwall\Types\PhotoAlbumType;
 use GraphQL\Oxwall\Types\UserProfileType;
 use GraphQL\Oxwall\Types\MenuType;
 use GraphQL\Oxwall\Types\NewsfeedType;
+use GraphQL\Oxwall\Types\GroupType;
+use GraphQL\Oxwall\Types\VideoType;
 
 /**
  * Class Types
@@ -41,7 +45,9 @@ class Types {
     private static $profile;
     private static $menu;
     private static $newsfeed;
-	
+    private static $group;
+    private static $video;
+
     /**
      * @return UserType
      */
@@ -91,19 +97,34 @@ class Types {
         return self::$profile ?: (self::$profile = new UserProfileType());
     }
 
-        /**
+    /**
      * @return MenuType
      */
     public static function menu() {
         return self::$menu ?: (self::$menu = new MenuType());
     }
-    
+
     /**
      * @return NewsfeedType
      */
     public static function newsfeed() {
-        return self::$newsfeed ?: (self::$newsfeed = new NeewsfeedType());
+        return self::$newsfeed ?: (self::$newsfeed = new NewsfeedType());
     }
+
+    /**
+     * @return GroupType
+     */
+    public static function group() {
+        return self::$group ?: (self::$group = new GroupType());
+    }
+
+    /**
+     * @return VideoType
+     */
+    public static function video() {
+        return self::$video ?: (self::$video = new VideoType());
+    }
+
     /**
      * @return QueryType
      */
@@ -129,6 +150,8 @@ class Types {
     private static $userListEnum;
     private static $blogListEnum;
     private static $photoListEnum;
+    private static $groupListEnum;
+    private static $videoListEnum;
 
     /**
      * @return UserListEnum
@@ -152,6 +175,20 @@ class Types {
     }
 
     /**
+     * @return GroupListEnum
+     */
+    public static function groupListEnum() {
+        return self::$groupListEnum ?: (self::$groupListEnum = new GroupListEnum());
+    }
+
+    /**
+     * @return VideoListEnum
+     */
+    public static function videoListEnum() {
+        return self::$videoListEnum ?: (self::$videoListEnum = new VideoListEnum());
+    }
+
+    /**
      * @param $name
      * @param null $objectKey
      * @return array
@@ -172,6 +209,8 @@ class Types {
 
 
 
+
+
     }
 
 /**
@@ -189,6 +228,8 @@ return Type::int();
 
 
 
+
+
     }
 
 /**
@@ -196,6 +237,8 @@ return Type::int();
  */
 public static function string(){
 return Type::string();
+
+
 
 
 

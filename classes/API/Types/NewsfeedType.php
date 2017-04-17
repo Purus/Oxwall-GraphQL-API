@@ -1,10 +1,12 @@
 <?php
+
 namespace GraphQL\Oxwall\Types;
 
 use GraphQL\Oxwall\Types;
 use GraphQL\Type\Definition\ObjectType;
 
 class NewsfeedType extends ObjectType {
+
     public function __construct() {
         $config = [
             'name' => 'Newsfeed',
@@ -12,10 +14,13 @@ class NewsfeedType extends ObjectType {
             'fields' => function() {
                 return [
                     'id' => Types::int(),
+                    'entityType' => Types::string(),
+                    'entityId' => Types::int(),
                     'content' => Types::string(),
-                    'activityStamp' => Types::int(),
-                    'feedUrl' => Types::url(),
-                    'user' => Types::user(),
+                    'createTime' => Types::int(),
+                    'updateTime' => Types::int(),
+                    'permalink' => Types::url(),
+                    'user' => Types::listOf(Types::user()),
                     'likesCount' => Types::int(),
                     'commentsCount' => Types::int()
                 ];
@@ -23,4 +28,5 @@ class NewsfeedType extends ObjectType {
         ];
         parent::__construct($config);
     }
+
 }

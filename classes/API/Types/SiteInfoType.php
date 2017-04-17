@@ -56,7 +56,7 @@ class SiteInfoType extends ObjectType {
                     'secondaryMenu' => [
                         'type' => Types::listOf(Types::menu()),
                         'description' => 'List of all secondary menu items'
-                    ]                       
+                    ]
                 ];
             }
         ];

@@ -55,4 +55,14 @@ class AppContext {
      */
     public $newsfeedService;
 
+    /**
+     * @var Group Service instance
+     */
+    public $groupService;
+
+    /**
+     * @var Video Service instance
+     */
+    public $videoService;
+
 }
