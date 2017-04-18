@@ -61,9 +61,20 @@ class GRAPHQL_BOL_GroupsService {
         return $groupInfo;
     }
 
-    public function getGroups($case, $hasMembers, $first, $count) {
+    public function findGroupList($case, $hasMembers, $first, $count) {
         $groups = GROUPS_BOL_Service::getInstance()->findGroupList($case, $first, $count);
-
+        
+        return $this->processGroups($groups, $hasMembers);
+    }
+    
+    public function findUserGroupList($userId, $hasMembers, $first, $count) {
+        $groups = GROUPS_BOL_Service::getInstance()->findMyGroups($userId, $first, $count);
+        
+        return $this->processGroups($groups, $hasMembers);
+    }
+    
+    public function processGroups($groups, $hasMembers) {
+        
         $allGroups = $idList = array();
 
         foreach ($groups as $group) {
