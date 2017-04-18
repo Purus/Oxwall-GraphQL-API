@@ -46,7 +46,7 @@ class GRAPHQL_CTRL_Action extends OW_ActionController {
         $appContext->photoService = GRAPHQL_BOL_PhotoService::getInstance();
         $appContext->profileService = GRAPHQL_BOL_ProfileService::getInstance();
         $appContext->newsfeedService = GRAPHQL_BOL_NewsfeedService::getInstance();
-        $appContext->groupService = GRAPHQL_BOL_GroupService::getInstance();
+        $appContext->groupService = GRAPHQL_BOL_GroupsService::getInstance();
         $appContext->videoService = GRAPHQL_BOL_VideoService::getInstance();
 
         // Parse incoming query and variables

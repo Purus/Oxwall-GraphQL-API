@@ -26,7 +26,7 @@ class GRAPHQL_BOL_VideoService {
     private function __construct() {
         
     }
-    public function getGroupById($id) {
+    public function getVideoById($id) {
         $video = VIDEO_BOL_ClipService::getInstance()->findClipById($id);
         
         if (!$video) {
@@ -59,25 +59,27 @@ class GRAPHQL_BOL_VideoService {
     }
     
     public function processVideos($videos) {
+        // printVar($videos);
         $defaultImage = VIDEO_BOL_ClipService::getInstance()->getClipDefaultThumbUrl();
         
         $videoInfo = $idList = array();
         
         foreach ($videos as $video) {
-            $id = $video->id;
+            $id = $video['id'];
             $idList[] = $id;
-            $userList[] = $video->userId;
+            $userList[] = $video['userId'];
             $videoInfo[$id]['id'] = $id;
-            $videoInfo[$id]['title'] = strip_tags($video->title);
-            $videoInfo[$id]['description'] = strip_tags($video->description);
-            $videoInfo[$id]['timestamp'] = $video->addDatetime;
-            $videoInfo[$id]['code'] = $video->code;
-            $videoInfo[$id]['url'] = OW::getRouter()->urlForRoute('view_clip', array('id' => $video->id));
-            $videoInfo[$id]['user'] = GRAPHQL_BOL_UserService::getInstance()->getUserById($video->userId);
+            $videoInfo[$id]['title'] = strip_tags($video['title']);
+            $videoInfo[$id]['description'] = strip_tags($video['description']);
+            $videoInfo[$id]['timestamp'] = $video['addDatetime'];
+            $videoInfo[$id]['code'] = $video['code'];
+            $videoInfo[$id]['provider'] = $video['provider'];            
+            $videoInfo[$id]['url'] = OW::getRouter()->urlForRoute('view_clip', array('id' => $id));
+            $videoInfo[$id]['user'] = GRAPHQL_BOL_UserService::getInstance()->getUserById($video['userId']);
             
-            $thumbnail = VIDEO_BOL_ClipService::getInstance()->getClipThumbUrl($video->id)
+            $thumbnail = VIDEO_BOL_ClipService::getInstance()->getClipThumbUrl($id);
             
-            if ( $thumbnail == "undefined" ){
+            if ($thumbnail == "undefined"){
                 $videoInfo[$id]["thumbnail"] = $defaultImage;
             }else{
                 $videoInfo[$id]["thumbnail"] = $thumbnail;

@@ -145,16 +145,55 @@ class QueryType extends ObjectType {
                         ],
                     ],
                     'resolve' => function($value, $args, $context, ResolveInfo $info) {
-                        $context->groupService->getProfileById(1);
                         if ($args['id'] > 0) {
-                            return $context->groupService->getPhotoById($args['id']);
+                            return $context->groupService->getGroupById($args['id'],true);
                         } else if ($args['userId'] > 0) {
-                            return $context->groupService->getPhotoByUserId($args['userId'], $args['offset'], $args['limit']);
+                            return $context->groupService->findUserGroupList($args['userId'], true,$args['offset'], $args['limit']);
                         } else {
-                            return $context->groupService->getPhotoList($args['key'], $args['offset'], $args['limit']);
+                            return $context->groupService->findGroupList($args['key'],true, $args['offset'], $args['limit']);
                         }
                     }
                 ],
+                'video' => [
+                    'type' => Types::listOf(Types::video()),
+                    'description' => 'Returns all videos',
+                    'args' => [
+                        'id' => [
+                            'type' => Types::id(),
+                            'description' => 'Id for which the video is requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'userId' => [
+                            'type' => Types::id(),
+                            'description' => 'User id for which the videos are requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'key' => [
+                            'type' => Types::videoListEnum(),
+                            'description' => 'Type of group list to get',
+                            'defaultValue' => 'latest'
+                        ],
+                        'offset' => [
+                            'type' => Types::int(),
+                            'description' => 'Offset to fetch data from',
+                            'defaultValue' => 1
+                        ],
+                        'limit' => [
+                            'type' => Types::int(),
+                            'description' => 'Data limit to fetch',
+                            'defaultValue' => 50
+                        ],
+                    ],
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                        if ($args['id'] > 0) {
+                            return $context->videoService->getVideoById($args['id']);
+                        } else if ($args['userId'] > 0) {
+                            return $context->videoService->findUserVideos($args['userId'],$args['offset'], $args['limit']);
+                        } else {
+                            return $context->videoService->findVideosList($args['key'], $args['offset'], $args['limit']);
+                        }
+                    }
+                ],                
                 'blog' => [
                     'type' => Types::listOf(Types::blog()),
                     'description' => 'Returns all blog posts',

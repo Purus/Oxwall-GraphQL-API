@@ -147,6 +147,8 @@ class GRAPHQL_BOL_NewsfeedService {
             'users' => $userIds,
             'permalink' => $permalink,
             'activity' => $data['lastActivity'],
+            'likesCount' => 10,
+            'commentsCount' => 2
         );
 
         $item['autoId'] = $action->getId();

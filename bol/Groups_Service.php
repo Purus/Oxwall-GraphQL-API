@@ -44,7 +44,7 @@ class GRAPHQL_BOL_GroupsService {
         $groupInfo[$id]['id'] = $id;
         $groupInfo[$id]['title'] = strip_tags($group->title);
         $groupInfo[$id]['description'] = strip_tags($group->description);
-        $groupInfo[$id]['timestamp'] = $group->timestamp;
+        $groupInfo[$id]['timestamp'] = $group->timeStamp;
         $groupInfo[$id]['imageSmall'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 0);
         $groupInfo[$id]['imageBig'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 1);
         $groupInfo[$id]['url'] = OW::getRouter()->urlForRoute('groups-view', array('groupId' => $group->id));
@@ -86,7 +86,7 @@ class GRAPHQL_BOL_GroupsService {
             $allGroups[$id]['id'] = $id;
             $allGroups[$id]['title'] = strip_tags($group->title);
             $allGroups[$id]['description'] = strip_tags($group->description);
-            $allGroups[$id]['timestamp'] = $group->timestamp;
+            $allGroups[$id]['timestamp'] = $group->timeStamp;
             $allGroups[$id]['imageSmall'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 0);
             $allGroups[$id]['imageBig'] = GROUPS_BOL_Service::getInstance()->getGroupImageUrl($group, 1);
             $allGroups[$id]['url'] = OW::getRouter()->urlForRoute('groups-view', array('groupId' => $group->id));
