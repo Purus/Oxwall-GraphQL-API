@@ -45,7 +45,7 @@ class GRAPHQL_BOL_BlogService {
 
         $posts = array();
 
-        $user = GRAPHQL_BOL_UserService::getInstance()->getUserById($id);
+        $user = GRAPHQL_BOL_UserService::getInstance()->getUserById($dto->getAuthorId());
 
         $posts[$id]['id'] = $dto->getId();
         $posts[$id]['title'] = $dto->getTitle();
@@ -66,7 +66,7 @@ class GRAPHQL_BOL_BlogService {
         foreach ($list as $item) {
             $dto = $item['dto'];
             $id = $dto->getId();
-            $idList[] = $id;
+            $idList[$id] = $dto->getAuthorId();
 
             $posts[$id]['id'] = $dto->getId();
             $posts[$id]['title'] = $dto->getTitle();
@@ -79,8 +79,11 @@ class GRAPHQL_BOL_BlogService {
 
         $users = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($idList);
 
-        foreach ($users as $id => $user) {
-            $posts[$id]['user'] = $user;
+        foreach ($list as $item) {
+            $dto = $item['dto'];
+            $id = $dto->getId();
+
+            $posts[$id]['user'] = $users[$id];
         }
 
         return $posts;
