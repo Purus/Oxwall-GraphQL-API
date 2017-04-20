@@ -23,6 +23,7 @@
 class GRAPHQL_BOL_BlogService {
 
     private static $classInstance;
+    private $previewLength = 150;
 
     public static function getInstance() {
         if (self::$classInstance === null) {
@@ -56,6 +57,12 @@ class GRAPHQL_BOL_BlogService {
         $posts[$id]['user'] = $user[$id];
         $posts[$id]['url'] = OW::getRouter()->urlForRoute('user-post', array('id' => $id));
 
+        $text = str_replace('&nbsp;', ' ', $dto->getPost());
+        $text = strip_tags($text);
+$summary = UTIL_String::splitWord(UTIL_String::truncate($text, $this->previewLength));
+
+            $posts[$id]['summary'] = mb_strlen($text) > $this->previewLength ? $summary . "..." : $summary;
+
         return $posts;
     }
 
@@ -71,6 +78,12 @@ class GRAPHQL_BOL_BlogService {
             $posts[$id]['id'] = $dto->getId();
             $posts[$id]['title'] = $dto->getTitle();
             $posts[$id]['post'] = $dto->getPost();
+
+        $text = str_replace('&nbsp;', ' ', $dto->getPost());
+        $text = strip_tags($text);
+$summary = UTIL_String::splitWord(UTIL_String::truncate($text, $this->previewLength));
+
+            $posts[$id]['summary'] = mb_strlen($text) > $this->previewLength ? $summary . "..." : $summary;
             $posts[$id]['privacy'] = $dto->getPrivacy();
             $posts[$id]['timestamp'] = $dto->getTimestamp();
             $posts[$id]['isDraft'] = $dto->isDraft();
@@ -79,11 +92,8 @@ class GRAPHQL_BOL_BlogService {
 
         $users = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($idList);
 
-        foreach ($list as $item) {
-            $dto = $item['dto'];
-            $id = $dto->getId();
-
-            $posts[$id]['user'] = $users[$id];
+        foreach ($idList as $blogId => $userId) {
+            $posts[$blogId]['user'] = $users[$userId];
         }
 
         return $posts;

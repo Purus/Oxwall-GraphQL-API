@@ -36,6 +36,10 @@ class VideoType extends ObjectType {
                     'url' => [
                         'type' => Types::url(),
                         'description' => 'URL of the video'
+                    ],                    
+                    'thumbnail' => [
+                        'type' => Types::url(),
+                        'description' => 'URL of the video thumbnail'
                     ],
                     'provider' => [
                         'type' => Types::string(),

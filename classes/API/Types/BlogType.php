@@ -29,6 +29,10 @@ class BlogType extends ObjectType {
                         'type' => Types::string(),
                         'description' => 'Content of the blog post'
                     ],
+                    'summary' => [
+                        'type' => Types::string(),
+                        'description' => 'Summary content of the blog post'
+                    ],                    
                     'timestamp' => [
                         'type' => Types::int(),
                         'description' => 'Blog post creation timestamp'

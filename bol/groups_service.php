@@ -81,7 +81,7 @@ class GRAPHQL_BOL_GroupsService {
             $id = $group->id;
 
             $idList[] = $id;
-            $userList[] = $group->userId;
+            $userList[$id] = $group->userId;
 
             $allGroups[$id]['id'] = $id;
             $allGroups[$id]['title'] = strip_tags($group->title);
@@ -105,8 +105,9 @@ class GRAPHQL_BOL_GroupsService {
         }
 
         $users = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($userList);
-        foreach ($users as $id => $user) {
-            $allGroups[$id]['user'] = $user;
+
+        foreach ($userList as $groupId => $userId) {
+            $allGroups[$groupId]['user'] = $users[$userId];
         }
 
         return $allGroups;

@@ -17,15 +17,18 @@
  */
 class GRAPHQL_BOL_VideoService {
     private static $classInstance;
+
     public static function getInstance() {
         if (self::$classInstance === null) {
             self::$classInstance = new self();
         }
         return self::$classInstance;
     }
+
     private function __construct() {
         
     }
+    
     public function getVideoById($id) {
         $video = VIDEO_BOL_ClipService::getInstance()->findClipById($id);
         
@@ -59,15 +62,16 @@ class GRAPHQL_BOL_VideoService {
     }
     
     public function processVideos($videos) {
-        // printVar($videos);
         $defaultImage = VIDEO_BOL_ClipService::getInstance()->getClipDefaultThumbUrl();
         
         $videoInfo = $idList = array();
         
         foreach ($videos as $video) {
             $id = $video['id'];
+
             $idList[] = $id;
-            $userList[] = $video['userId'];
+            $userList[$id] = $video['userId'];
+
             $videoInfo[$id]['id'] = $id;
             $videoInfo[$id]['title'] = strip_tags($video['title']);
             $videoInfo[$id]['description'] = strip_tags($video['description']);
@@ -88,8 +92,8 @@ class GRAPHQL_BOL_VideoService {
         
         $users = GRAPHQL_BOL_UserService::getInstance()->getUsersListByIdList($userList);
         
-        foreach ($users as $id => $user) {
-            $videoInfo[$id]['user'] = $user;
+        foreach ($userList as $videoId => $userId) {
+            $videoInfo[$videoId]['user'] = $users[$userId];
         }
         
         return $videoInfo;
