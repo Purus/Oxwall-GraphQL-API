@@ -65,4 +65,8 @@ class AppContext {
      */
     public $videoService;
 
+    /**
+     * @var Birthday Service instance
+     */
+public $birthdayService;
 }

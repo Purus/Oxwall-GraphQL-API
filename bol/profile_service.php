@@ -214,7 +214,7 @@ class GRAPHQL_BOL_ProfileService {
 
                 $a = htmlspecialchars($questionAnswerT);
 
-                $profileValues[] = array('section' => $sectionString, 'question' => $q, 'value' => $a);
+                $profileValues[] = array('section' => $sectionString, 'question' => $q, 'value' => $a , 'name'=>$question['name']);
             }
         }
 

@@ -24,7 +24,11 @@ class UserProfileType extends ObjectType {
                     'value' => [
                         'type' => Types::string(),
                         'description' => 'Profile Question Value'
-                    ]
+                    ],
+                    'name' => [
+                        'type' => Types::string(),
+                        'description' => 'Profile Question Name'
+                    ]					
                 ];
             },
         ];

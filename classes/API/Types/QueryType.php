@@ -73,6 +73,20 @@ class QueryType extends ObjectType {
                         return $context->newsfeedService->getSiteNewsfeed();
                     }
                 ],
+                'birthday' => [
+                    'type' => Types::listOf(Types::user()),
+                    'description' => 'Returns all users with birthday',
+                    'args' => [
+                        'key' => [
+                            'type' => Types::birthdayEnum(),
+                            'description' => 'Birthdays for current day or current week',
+                            'defaultValue' => 'today'
+                        ]
+                    ],
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                        return $context->birthdayService->getBirthdayUsers($args['key'],20);
+                    }
+                ],                
                 'photo' => [
                     'type' => Types::listOf(Types::photo()),
                     'description' => 'Returns all blog posts',

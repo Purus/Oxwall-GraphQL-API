@@ -9,6 +9,7 @@ use GraphQL\Oxwall\Types\Enum\BlogListEnum;
 use GraphQL\Oxwall\Types\Enum\PhotoListEnum;
 use GraphQL\Oxwall\Types\Enum\GroupListEnum;
 use GraphQL\Oxwall\Types\Enum\VideoListEnum;
+use GraphQL\Oxwall\Types\Enum\BirthdayEnum;
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\Type;
@@ -152,7 +153,7 @@ class Types {
     private static $photoListEnum;
     private static $groupListEnum;
     private static $videoListEnum;
-
+    private static $birthdayEnum;
     /**
      * @return UserListEnum
      */
@@ -188,6 +189,12 @@ class Types {
         return self::$videoListEnum ?: (self::$videoListEnum = new VideoListEnum());
     }
 
+    /**
+     * @return BirthdayEnum
+     */
+    public static function birthdayEnum() {
+        return self::$birthdayEnum ?: (self::$birthdayEnum = new BirthdayEnum());
+    }
     /**
      * @param $name
      * @param null $objectKey

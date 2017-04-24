@@ -32,13 +32,17 @@ class GRAPHQL_BOL_BirthdayService {
     public function getBirthdayUsers($type,$count) {
         switch($type){
           case 'week':
-            $userList = BIRTHDAYS_BOL_Service::getInstance()->findListByBirthdayPeriod(date('Y-m-d', strtotime('+1 day')), date('Y-m-d', strtotime('+7 day')), 0, $count, null, array('everybody'))) 
+            $userList = BIRTHDAYS_BOL_Service::getInstance()->findListByBirthdayPeriod(date('Y-m-d', strtotime('+1 day')), date('Y-m-d', strtotime('+7 day')), 0, $count, null, array('everybody')) ;
             break;
           case 'today':
-            $userList = BIRTHDAYS_BOL_Service::getInstance()->findListByBirthdayPeriod(date('Y-m-d'), date('Y-m-d'), 0, $count, null, array('everybody')));
+            $userList = BIRTHDAYS_BOL_Service::getInstance()->findListByBirthdayPeriod(date('Y-m-d'), date('Y-m-d'), 0, $count, null, array('everybody'));
             break;
         }
         
+        if(!$userList){
+            return [];
+        }
+
         foreach($userList as $user){
           $userIdList[] = $user->getId();
         }
