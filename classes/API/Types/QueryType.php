@@ -168,6 +168,53 @@ class QueryType extends ObjectType {
                         }
                     }
                 ],
+                'event' => [
+                    'type' => Types::listOf(Types::event()),
+                    'description' => 'Returns all events',
+                    'args' => [
+                        'id' => [
+                            'type' => Types::id(),
+                            'description' => 'Id for which the event is requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'userId' => [
+                            'type' => Types::id(),
+                            'description' => 'User id for which the events are requested. Other arguments will be ignored',
+                            'defaultValue' => 0
+                        ],
+                        'key' => [
+                            'type' => Types::eventListEnum(),
+                            'description' => 'Type of event list to get',
+                            'defaultValue' => 'latest'
+                        ],
+                        'offset' => [
+                            'type' => Types::int(),
+                            'description' => 'Offset to fetch data from',
+                            'defaultValue' => 1
+                        ],
+                        'limit' => [
+                            'type' => Types::int(),
+                            'description' => 'Data limit to fetch',
+                            'defaultValue' => 50
+                        ],
+                    ],
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                        if ($args['id'] > 0) {
+                            return $context->eventService->getEventById($args['id'],true);
+                        } else if ($args['userId'] > 0) {
+                            return $context->eventService->findUserGroupList('created',$args['userId'], false,$args['offset'], $args['limit']);
+                        } else {
+                            return $context->eventService->findEventsList($args['key'],0, false,$args['offset'], $args['limit']);
+                        }
+                    }
+                ], 
+                'forum' => [
+                    'type' => Types::listOf(Types::forum()),
+                    'description' => 'Returns all forum posts',
+                    'resolve' => function($value, $args, $context, ResolveInfo $info) {
+                            return $context->forumService->getForumPosts();
+                    }
+                ],                                
                 'video' => [
                     'type' => Types::listOf(Types::video()),
                     'description' => 'Returns all videos',

@@ -10,6 +10,7 @@ use GraphQL\Oxwall\Types\Enum\PhotoListEnum;
 use GraphQL\Oxwall\Types\Enum\GroupListEnum;
 use GraphQL\Oxwall\Types\Enum\VideoListEnum;
 use GraphQL\Oxwall\Types\Enum\BirthdayEnum;
+use GraphQL\Oxwall\Types\Enum\EventListEnum;
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\Type;
@@ -25,6 +26,8 @@ use GraphQL\Oxwall\Types\MenuType;
 use GraphQL\Oxwall\Types\NewsfeedType;
 use GraphQL\Oxwall\Types\GroupType;
 use GraphQL\Oxwall\Types\VideoType;
+use GraphQL\Oxwall\Types\EventType;
+use GraphQL\Oxwall\Types\ForumType;
 
 /**
  * Class Types
@@ -48,6 +51,8 @@ class Types {
     private static $newsfeed;
     private static $group;
     private static $video;
+    private static $event;
+    private static $forum;
 
     /**
      * @return UserType
@@ -127,6 +132,20 @@ class Types {
     }
 
     /**
+     * @return EventType
+     */
+    public static function event() {
+        return self::$event ?: (self::$event = new EventType());
+    }
+
+    /**
+     * @return ForumType
+     */
+    public static function forum() {
+        return self::$forum ?: (self::$forum = new ForumType());
+    }
+    
+    /**
      * @return QueryType
      */
     public static function query() {
@@ -154,6 +173,8 @@ class Types {
     private static $groupListEnum;
     private static $videoListEnum;
     private static $birthdayEnum;
+    private static $eventListEnum;
+
     /**
      * @return UserListEnum
      */
@@ -195,6 +216,14 @@ class Types {
     public static function birthdayEnum() {
         return self::$birthdayEnum ?: (self::$birthdayEnum = new BirthdayEnum());
     }
+
+    /**
+     * @return EventListEnum
+     */
+    public static function eventListEnum() {
+        return self::$eventListEnum ?: (self::$eventListEnum = new EventListEnum());
+    }
+
     /**
      * @param $name
      * @param null $objectKey

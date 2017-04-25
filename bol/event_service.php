@@ -43,7 +43,7 @@ class GRAPHQL_BOL_EventService {
     
     public function findEventsList($listType, $userId, $hasMembers, $page, $count) {
     
-        switch ($listType) ){
+        switch ($listType){
           case 'created':
             $events = EVENT_BOL_EventService::getInstance()->findUserEvents($userId, $page, null, true);
             break;
@@ -58,6 +58,10 @@ class GRAPHQL_BOL_EventService {
             break;          
         }
         
+        if(!$events){
+            return [];
+        }
+
         return $this->processEvents($events, $hasMembers);
     }
      

@@ -69,4 +69,14 @@ class AppContext {
      * @var Birthday Service instance
      */
 public $birthdayService;
+
+    /**
+     * @var Events Service instance
+     */
+public $eventService;
+
+    /**
+     * @var Forum Service instance
+     */
+public $forumService;
 }
